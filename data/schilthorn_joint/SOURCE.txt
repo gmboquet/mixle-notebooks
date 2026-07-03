@@ -1,0 +1,47 @@
+Schilthorn (Swiss Alps) co-located ERT + seismic-refraction permafrost profile
+================================================================================
+
+A small redistributed extract of the co-located electrical-resistivity-tomography
+(ERT) and seismic-refraction-tomography (SRT) profile across the Schilthorn
+permafrost monitoring site (Bernese Alps, Switzerland, ~2900 m a.s.l.), used here
+for a joint (cross-gradient) inversion teaching notebook.
+
+Files
+-----
+  ert.data   pyGIMLi "unified data format": 50 electrodes + 358 quadrupoles
+             (columns a b m n u i err k rhoa; rhoa = apparent resistivity in Ohm.m,
+             err = relative error).
+  rst.data   pyGIMLi unified format: 52 sensors + 620 first-arrival traveltimes
+             (columns s g t err; t = first-arrival time in seconds, err absolute).
+
+Primary method / data reference
+-------------------------------
+  Wagner, F. M., Mollaret, C., Guenther, T., Kemna, A., & Hauck, C. (2019).
+  Quantitative imaging of water, ice and air in permafrost systems through
+  petrophysical joint inversion of seismic refraction and electrical resistivity
+  data. Geophysical Journal International, 219(3), 1866-1875.
+  https://doi.org/10.1093/gji/ggz402   (CC-BY 4.0)
+
+  Reference implementation (BSD-3-Clause):
+  https://github.com/florian-wagner/four-phase-inversion
+
+Field data / monitoring network
+--------------------------------
+  PERMOS 2019. PERMOS Database. Swiss Permafrost Monitoring Network, Fribourg and
+  Davos, Switzerland. https://doi.org/10.13093/permos-2019-01
+
+  Site soil-moisture context:
+  Pellet, C., Hilbich, C., Marmy, A., & Hauck, C. (2016). Soil Moisture Data for
+  the Validation of Permafrost Models Using Direct and Indirect Measurement
+  Approaches at Three Alpine Sites. Frontiers in Earth Science, 3, 91.
+  https://doi.org/10.3389/feart.2015.00091
+
+Licensing
+---------
+  Paper text/figures: CC-BY 4.0 (Wagner et al. 2019).
+  Reference code repository: BSD-3-Clause (florian-wagner/four-phase-inversion).
+  Field data: PERMOS database policy (academic use with attribution; see
+  https://doi.org/10.13093/permos-2019-01).
+
+  This is a small extract redistributed for non-commercial teaching with full
+  attribution. Please cite Wagner et al. (2019) and PERMOS (2019) if you reuse it.

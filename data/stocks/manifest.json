@@ -1,0 +1,13 @@
+{
+  "spot": 100.0,
+  "risk_free_rate": 0.03,
+  "note": "Simulated data. Prices are correlated geometric Brownian motion; the option chain is priced with a built-in volatility smile so implied volatility can be recovered.",
+  "tickers": {
+    "NORTHfield": "technology",
+    "BANCOR": "financials",
+    "PETRAX": "energy",
+    "SHOPwell": "consumer",
+    "MEDIQ": "healthcare",
+    "GRIDCO": "utilities"
+  }
+}

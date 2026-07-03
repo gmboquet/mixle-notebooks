@@ -1,0 +1,17 @@
+mixle @ git+https://github.com/gmboquet/mixle.git
+jupyterlab
+matplotlib
+pandas
+openpyxl
+bokeh
+jupyter_bokeh
+nltk
+scikit-learn
+torch
+sympy
+mpi4py
+dask[distributed]
+mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git  # PDE/physics stack for the inverse-problem notebooks
+transformers
+timm
+Pillow

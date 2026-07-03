@@ -1,0 +1,28 @@
+{
+  "source": {
+    "name": "Online Retail II",
+    "creator": "Daqing Chen",
+    "repository": "UCI Machine Learning Repository",
+    "dataset_page": "https://archive.ics.uci.edu/dataset/502/online%2Bretail%2Bii",
+    "download_url": "https://archive.ics.uci.edu/static/public/502/online+retail+ii.zip",
+    "doi": "10.24432/C5CG6D",
+    "license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "citation": "Chen, D. (2012). Online Retail II [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5CG6D."
+  },
+  "preparation": {
+    "top_k_items": 150,
+    "filters": [
+      "drop cancellation invoices whose invoice id starts with C",
+      "keep positive quantity and positive unit price lines",
+      "drop service/adjustment style stock codes and descriptions",
+      "represent each invoice by active item indices among the top 150 products by invoice count"
+    ],
+    "raw_rows": 1036102,
+    "transactions_with_top_items": 32957,
+    "num_items": 150,
+    "date_min": "2009-12-01 07:45:00",
+    "date_max": "2011-12-09 12:50:00",
+    "countries": 43,
+    "customers": 5458
+  }
+}

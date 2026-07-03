@@ -1,0 +1,11 @@
+IHFC Global Heat Flow Database — Release 2024 (extract)
+
+ihfc_us_onshore.csv is a filtered extract (US onshore-continental wells carrying heat flow + temperature
+gradient + thermal conductivity, clamped to physical bounds) of:
+
+    Global Heat Flow Data Assessment Group, Fuchs, S., Norden, B., et al. (2024).
+    The Global Heat Flow Database: Release 2024. GFZ Data Services.
+    https://doi.org/10.5880/fidgeo.2024.014
+
+License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Redistributed here with attribution.
+Full database: https://www.ihfc-iugg.org/products/global-heat-flow-database

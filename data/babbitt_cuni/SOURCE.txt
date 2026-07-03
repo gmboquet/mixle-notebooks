@@ -1,0 +1,38 @@
+Babbitt Cu-Ni deposit drill-hole dataset (Duluth Complex, Minnesota, USA)
+========================================================================
+
+Files
+-----
+collar_BABBITT.csv   399 drill-hole collars: BHID, XCOLLAR, YCOLLAR, ZCOLLAR
+survey_BABBITT.csv   down-hole surveys:     BHID, AT, AZ, DIP
+assay_BABBITT.csv    35,616 assay intervals: BHID, FROM, TO, CU, NI, S, FE
+
+Units & conventions
+-------------------
+- Coordinates and depths are in FEET (a US state-plane / local mine grid),
+  NOT metres.
+- CU, NI, S are in weight percent (%); FE is sparse (only ~24 values) and is
+  effectively unusable.
+- Blank assay cells mean "not assayed" (barren / un-sampled rock) and are
+  NA, NOT zero. They must be dropped, not filled with 0.
+- Survey DIP is measured from horizontal (90 = vertical down); AZ is the
+  down-hole azimuth in degrees.
+- Collar BHID 34873 sits ~6,000 ft off the main drill grid and is a deep
+  vertical reference/condemnation hole; exclude it for grid-scale work.
+
+Provenance / citation
+---------------------
+Patelke, R. L. (1994) and associated NRRI compilations of the Babbitt
+(Birch Lake / NorthMet area) Cu-Ni-PGE deposit drilling, Natural Resources
+Research Institute (NRRI), University of Minnesota Duluth.
+Repository handle: hdl.handle.net/11299/188523
+Convenience mirror used here: github.com/opengeostat/PyGSLIB_Tutorial
+(the PyGSLIB "Babbitt" tutorial dataset).
+
+License / redistribution
+-----------------------
+This is open government / public-university exploration data redistributed
+WITH ATTRIBUTION. It is NOT released under a single clean Creative Commons
+license; treat it as openly-published-with-attribution research data. Cite
+Patelke (1994) / NRRI, University of Minnesota Duluth, and the handle above.
+Used here strictly for non-commercial teaching of geostatistical method.
