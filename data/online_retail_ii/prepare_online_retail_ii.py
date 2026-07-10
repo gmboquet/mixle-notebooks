@@ -51,6 +51,8 @@ SERVICE_DESCRIPTION_RE = re.compile(
 
 
 def extract_workbook() -> None:
+    """Extract the raw Excel workbook from the downloaded UCI archive."""
+
     if RAW_XLSX.exists():
         return
     if not RAW_ZIP.exists():
@@ -62,6 +64,8 @@ def extract_workbook() -> None:
 
 
 def read_workbook() -> pd.DataFrame:
+    """Read all workbook sheets into one normalized Pandas frame."""
+
     extract_workbook()
     frames = []
     xl = pd.ExcelFile(RAW_XLSX, engine="openpyxl")
@@ -78,6 +82,8 @@ def read_workbook() -> pd.DataFrame:
 
 
 def clean_lines(df: pd.DataFrame) -> pd.DataFrame:
+    """Filter raw invoice rows down to positive product-sale lines."""
+
     rv = df.rename(columns={
         "Invoice": "invoice_id",
         "StockCode": "stock_code",
@@ -111,6 +117,8 @@ def clean_lines(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def most_common_description(series: pd.Series) -> str:
+    """Return the most frequent non-empty description in a series."""
+
     values = series.dropna().astype(str).str.strip()
     if len(values) == 0:
         return ""
@@ -118,6 +126,8 @@ def most_common_description(series: pd.Series) -> str:
 
 
 def build_artifacts(clean: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+    """Build transaction, item, and manifest artifacts from clean lines."""
+
     item_stats = (
         clean.groupby("stock_code")
         .agg(
@@ -184,6 +194,8 @@ def build_artifacts(clean: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, di
 
 
 def main() -> None:
+    """Prepare CSV and manifest artifacts for the notebook workflow."""
+
     raw = read_workbook()
     clean = clean_lines(raw)
     transactions, items, manifest = build_artifacts(clean)

@@ -28,6 +28,20 @@ pip install "mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git"   # phys
 The Spark tutorial additionally needs a JVM (PySpark 4.x requires Java 17 or 21, e.g.
 `brew install openjdk@17` with `JAVA_HOME` set).
 
+## Documentation
+
+The Sphinx manual starts at [`docs/index.rst`](docs/index.rst). It documents installation, the
+notebook package map, the catalog structure, and validation expectations.
+
+```sh
+python -m pip install sphinx furo myst-parser
+make -C docs html SPHINXOPTS="-W --keep-going"
+```
+
+Release notes and the current changelog are in
+[`docs/release-notes.rst`](docs/release-notes.rst) and
+[CHANGELOG.md](CHANGELOG.md).
+
 ## The notebooks
 
 Four folders, organized by purpose — each has its own index. New here? Start with **tutorials/**.

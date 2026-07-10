@@ -37,10 +37,14 @@ def make(n, k=10, dim=0, seed=0):
 
 
 def ll(model, data):
+    """Compute the total log likelihood of encoded benchmark data."""
+
     return float(np.sum(model.seq_log_density(model.dist_to_encoder().seq_encode(data))))
 
 
 def run(backend, n=200_000, workers=4, iters=10, dim=0):
+    """Run one backend benchmark and print a JSON summary line."""
+
     est, init, data = make(n, dim=dim)
 
     if backend == "mpi":

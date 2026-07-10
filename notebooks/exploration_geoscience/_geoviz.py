@@ -326,7 +326,8 @@ def matrix(M, *, labels=None, title="", clabel="", cmap="magma", row_normalize=F
 
 # --------------------------------------------------------------------------- diagnostics
 def fit_scatter(obs, pred, *, units="", title=None, ax=None):
-    """Observed-vs-predicted data fit with the 1:1 line."""
+    """Plot observed-vs-predicted fit with the one-to-one reference line."""
+
     own = ax is None
     if own:
         fig, ax = plt.subplots(figsize=(4.4, 4.0))

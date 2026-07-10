@@ -3,6 +3,7 @@ jupyterlab
 matplotlib
 pandas
 openpyxl
+xlrd  # legacy .xls reader used by the geoscience basalt dataset loader
 bokeh
 jupyter_bokeh
 nltk
