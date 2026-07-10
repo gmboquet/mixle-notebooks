@@ -67,16 +67,16 @@ its claims against ground truth or an explicit ledger.
     gives a deterministic model-derived layout, and ``StreamingHvis`` places
     arriving batches against a fixed atlas.
 
-The ``embedding_with_htsne`` tutorial builds a **binding atlas**: six protein
-binding classes (two zinc motifs, a Ca²⁺ EF-hand, a P-loop, a DNA-binding basic
-patch, and a lipid pocket) embedded from biochemical features. The map recovers
-what each protein binds *and* discovers an emergent Zn²⁺ neighbourhood shared by
-the two different zinc motifs. It runs **head-to-head against edit (Levenshtein)
-distance** -- which barely separates the classes (same-class and between-class
-distances overlap), because binding is a short motif plus a compositional bias,
-not global sequence identity -- and showcases the new hvis ``goals``
-(``AxisAlign`` giving the map a metal-coordination axis) and ``embedding_health``
-(trustworthiness/continuity receipt that catches a bad map).
+The ``embedding_with_htsne`` tutorial shows htsne's reason to exist: embedding
+**heterogeneous, incomplete records** that t-SNE cannot take. Each protein is a
+mixed-type record -- a real (hydropathy), a categorical (fold), a set of tags,
+and an assay count that is *often missing* at a class-dependent rate -- and
+htsne embeds it natively through a mixture model (Gaussian + Categorical +
+Bernoulli-set + ``Optional``). It beats the standard flatten-and-mean-impute
+t-SNE pipeline (purity ~0.87 vs ~0.83), because imputation destroys the
+informative missingness that htsne's ``Optional`` field keeps as signal. It then
+showcases the new hvis ``goals`` (``AxisAlign`` giving the map a hydropathy
+axis) and ``embedding_health`` (trustworthiness/continuity receipt).
 
 Applications
 ------------
