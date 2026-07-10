@@ -67,13 +67,16 @@ its claims against ground truth or an explicit ledger.
     gives a deterministic model-derived layout, and ``StreamingHvis`` places
     arriving batches against a fixed atlas.
 
-The ``embedding_with_htsne`` tutorial embeds **proteins by what they bind** from
-heterogeneous sequence features (metal-coordination potential, basic fraction,
-hydropathy, length, and a detected binding motif -- C2H2 zinc finger, Walker-A
-P-loop, or basic patch), recovering binding function from sequence alone, and
-showcases the new hvis ``goals`` (``AxisAlign`` orienting the map so an axis
-reads metal-coordination potential) and ``embedding_health`` (trustworthiness/
-continuity receipt that catches a bad map).
+The ``embedding_with_htsne`` tutorial embeds **proteins by what they bind** and
+runs it **head-to-head against edit (Levenshtein) distance**: because a binding
+determinant is a short motif plus a compositional bias (C2H2 zinc finger,
+Walker-A P-loop, basic patch), edit distance -- which compares whole strings --
+barely separates the classes (same-class and between-class distances overlap),
+while a heterogeneous mixture over binding-relevant features (metal-coordination
+potential, basic fraction, hydropathy, length, detected motif) recovers binding
+function at near-perfect purity. It then showcases the new hvis ``goals``
+(``AxisAlign`` orienting the x-axis to read metal-coordination potential) and
+``embedding_health`` (trustworthiness/continuity receipt that catches a bad map).
 
 Applications
 ------------
