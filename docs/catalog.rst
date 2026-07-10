@@ -67,9 +67,12 @@ its claims against ground truth or an explicit ledger.
     gives a deterministic model-derived layout, and ``StreamingHvis`` places
     arriving batches against a fixed atlas.
 
-The ``embedding_with_htsne`` tutorial additionally showcases the new hvis
-``goals`` (guided layout via ``LabelCohesion``) and ``embedding_health``
-(trustworthiness/continuity receipt).
+The ``embedding_with_htsne`` tutorial embeds **protein families from
+heterogeneous sequence features** (hydropathy, charge, aromaticity, length,
+fold), recovering the classes from composition alone, and showcases the new
+hvis ``goals`` (``AxisAlign`` orienting the map so an axis reads hydrophobicity)
+and ``embedding_health`` (trustworthiness/continuity receipt that catches a bad
+map).
 
 Applications
 ------------
