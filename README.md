@@ -1,5 +1,8 @@
 # mixle-notebooks
 
+![license](https://img.shields.io/badge/license-MIT-green)
+![notebooks](https://img.shields.io/badge/notebooks-121-brightgreen)
+
 Worked examples, courses, and benchmarks for
 [mixle](https://github.com/gmboquet/mixle) — composable, distributed density estimation
 for messy, mixed-type data. The library is published on PyPI as `mixle` (the import name is
@@ -69,6 +72,13 @@ folder (`../../data/...`). Sources:
 - `data/stocks/` — a simulated multi-asset daily price panel and an option chain for the finance notebooks.
 - Plus the Iliad text, SSL certificate records, a word list, NeurIPS submissions, and a Wikipedia corpus.
 
+## Maintainers & contributors
+
+Maintained by **Grant Boquet** ([@gmboquet](https://github.com/gmboquet) ·
+grant.boquet@gmail.com).
+
+Contributions, issues, and discussion are welcome — open a PR or an issue.
+
 ## License
 
-MIT, matching mixle.
+MIT — see [LICENSE](https://github.com/gmboquet/mixle-notebooks/blob/main/LICENSE).
