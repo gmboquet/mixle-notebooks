@@ -29,7 +29,6 @@ artifacts.
    execution-runbook
    notebook-execution-manifest
    reproducibility
-   release-readiness
    release-notes
    changelog
    security-and-data
@@ -61,28 +60,13 @@ Notebook Groups
 ``notebooks/architecture_studies``
     Timing, scaling, warmup, and architecture studies.
 
-Release Review
---------------
+Notebook Health
+---------------
 
-Notebook health should be reported as execution evidence, not as a visual
-spot-check. A review record should include the kernel, timeout, package
-versions, data prerequisites, executed notebooks, skipped notebooks, failures,
-and whether outputs were intentionally refreshed. Notebooks that require
-private data or external services should state the prerequisite and remain
-blocked rather than silently passing with different inputs.
-
-Reader Expectations
--------------------
-
-Readers should be able to tell whether a notebook is a tutorial, course
-example, domain workflow, geoscience study, or performance experiment. Release
-reviewers should be able to tell whether it was executed, skipped, blocked, or
-timed out. Those two views need to stay aligned: the catalog describes purpose,
-and the execution manifest describes current health.
-
-Release Claim Standard
-----------------------
-
-A public claim about notebook health should point to an execution manifest, not
-only to committed notebook files. The manifest should cover every notebook in
-scope or explain why a notebook was skipped, blocked, or timed out.
+The catalog above describes what each notebook is for; :doc:`notebook-execution-manifest`
+describes whether it currently runs. Keep those two views aligned, and treat
+notebook health as execution evidence — kernel, timeout, package versions,
+and pass/skip/block status per notebook — rather than a visual spot-check of
+committed output cells. A notebook that needs private data or an external
+service should say so and stay marked blocked rather than silently pass
+against different inputs.

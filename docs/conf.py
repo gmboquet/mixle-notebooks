@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT))
 
 project = "mixle-notebooks"
 author = "Grant Boquet"
-copyright = "2014-2026, Grant Boquet and contributors"
+copyright = "2026, Grant Boquet"
 release = "0.7.0"
 version = "0.7"
 

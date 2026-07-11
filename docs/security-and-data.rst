@@ -16,13 +16,6 @@ When public data has licensing or attribution requirements, record them next to
 the notebook or dataset-preparation script. A notebook that runs locally is not
 automatically cleared for public release.
 
-Outputs
--------
-
-Outputs can contain secrets or data previews. Review output diffs before
-committing rerun notebooks. Prefer clearing outputs for notebooks where the
-rendered result is not part of the documentation value.
-
 Credentials
 -----------
 
@@ -36,25 +29,16 @@ Execution Reports
 Bitrot reports should capture status, timeout, worker count, and the first
 meaningful failure. They should not paste long private logs or raw payloads.
 
-Release Checklist
------------------
-
-Before release:
-
-* skip checkpoint files;
-* classify notebooks requiring external data or services;
-* review output diffs;
-* record timeouts and worker counts;
-* build docs with warnings as errors.
-
 Output Review
 -------------
 
-Treat notebook output as publication material. Inspect rendered tables, plots,
-tracebacks, shell output, file paths, package versions, environment variables,
-and widget state before committing a rerun. If an output cell is necessary for
-the reader, keep it small and source-backed. If the output is only a transient
-execution artifact, clear it and rely on the execution manifest for evidence.
+Treat notebook output as publication material — it can carry secrets or data
+previews just as easily as a shell log can. Before committing a rerun,
+inspect rendered tables, plots, tracebacks, shell output, file paths,
+package versions, environment variables, and widget state. If an output cell
+is necessary for the reader, keep it small and source-backed; if it's only a
+transient execution artifact, clear it and rely on the execution manifest
+for evidence instead.
 
 Path Hygiene
 ------------

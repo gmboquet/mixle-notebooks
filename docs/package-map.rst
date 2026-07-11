@@ -54,20 +54,13 @@ Ownership Notes
 ---------------
 
 Notebook directories own examples, narrative, and reproducible execution
-metadata. They should not become the owner of reusable algorithms, package
-schemas, gateway routes, or demo datasets. When a notebook needs reusable code,
-move that code to the appropriate package and keep the notebook focused on the
-workflow.
+metadata — they are not the source of truth for core algorithms, gateway
+routes, PDE solvers, or release schemas. When a notebook discovers reusable
+behavior, move the implementation to the owning package first and then
+update the notebook to demonstrate the reviewed API, rather than letting the
+notebook itself become the canonical copy.
 
 The ``data`` directory should stay small and explicit. Large, private, or
 externally licensed datasets should be documented as prerequisites instead of
 being committed silently. If a notebook depends on a generated artifact, record
 the command and package revision that produced it.
-
-Review Boundary
----------------
-
-Notebook directories are examples and evidence. They are not the source of
-truth for core algorithms, gateway behavior, PDE solvers, or release schemas.
-When a notebook discovers reusable behavior, move the implementation first and
-then update the notebook to demonstrate the reviewed API.

@@ -101,16 +101,7 @@ The ``architecture_studies`` notebooks measure import and warmup behavior,
 engine benchmarks, data scaling, model scaling, parallel scaling, and PPL
 scaling against other systems.
 
-Catalog Status Expectations
----------------------------
-
-The catalog should describe notebooks that are actually present in the
-repository. When a notebook is renamed, moved, or split, update the catalog and
-execution manifest in the same change. A catalog entry should not imply that a
-notebook is release-validated unless the execution manifest records a passing
-run or a clear skip/block reason.
-
-For public release, keep notebook groups useful to readers: tutorials teach API
-syntax, data-science notebooks teach modeling patterns, applications show
-domain workflows, geoscience notebooks exercise subsurface examples, and
-architecture studies measure performance or scaling behavior.
+When a notebook is renamed, moved, or split, update this catalog and
+:doc:`notebook-execution-manifest` in the same change — a catalog entry
+shouldn't imply a notebook is release-validated unless the manifest records
+a passing run or a clear skip/block reason.

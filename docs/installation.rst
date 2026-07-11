@@ -50,22 +50,6 @@ Notebook execution can require optional services or larger dependencies:
 * Architecture studies may be sensitive to warmup, CPU count, BLAS, and
   optional accelerator availability.
 
-Record those prerequisites in the notebook execution manifest instead of
-presenting skipped notebooks as passing evidence.
-
-Clean Execution Notes
----------------------
-
-For bitrot sweeps, install notebooks in a fresh environment and record the
-Python version, kernel name, package revisions, timeout, worker count, and
-external prerequisites. Avoid relying on an interactive Jupyter session that
-has already imported local modules; a clean execution command is more useful
-release evidence than a manually repaired notebook state.
-
-Install Failure Triage
-----------------------
-
-When a notebook environment fails, identify whether the failure is package
-installation, kernel registration, optional service setup, data availability,
-or notebook code. Those categories should be reported differently in bitrot
-evidence.
+:doc:`notebook-execution-manifest` records these prerequisites per notebook —
+a notebook missing one of them should show up there as blocked, not as a
+silent pass against different inputs.

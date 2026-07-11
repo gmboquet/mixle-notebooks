@@ -23,42 +23,15 @@ Three ``data_science`` notebooks were added and executed against a clean
   theorem) and ``GatedMixtureDistribution`` (learned gate ``p(k | z)``)
   families, each measured against the baseline it improves on.
 
-Included
---------
-
-* Sphinx manual with catalog, execution runbook, validation, and
-  troubleshooting pages.
-* Documentation of staged timeout strategy for notebook reruns.
-* ``docs/_build`` ignore rule for local builds.
-* Notebook-execution manifest guidance for timeout, worker count, execution
-  scope, status, and first meaningful failure.
-* Security/data guidance for downloaded datasets, private prerequisites,
-  rendered outputs, and cleared artifacts.
-* Strict local Sphinx Makefile path for documentation validation.
-
 Changed
 -------
 
 Notebook health is documented as execution evidence rather than a visual
-spot-check. Short timeout sweeps are useful for triage, but public release
-evidence needs either a successful execution record or an explicit
+spot-check: see :doc:`execution-runbook` for the staged timeout strategy and
+failure classification, and :doc:`notebook-execution-manifest` for current
+per-notebook status. Short timeout sweeps are useful for triage, but public
+release evidence needs either a successful execution record or an explicit
 skip/block reason for every shipped or linked notebook.
-
-Validation Evidence
--------------------
-
-Record:
-
-* notebook discovery scope;
-* worker count for parallel execution;
-* timeout used for each sweep or retry;
-* status per attempted notebook;
-* first meaningful error for failures;
-* ``make -C docs html SPHINXOPTS="-W --keep-going"``.
-* data prerequisites and whether they are public, synthetic, derived, or
-  private;
-* package versions or sibling checkout commits used for execution; and
-* whether outputs were refreshed, preserved, or intentionally cleared.
 
 Known Risks
 -----------

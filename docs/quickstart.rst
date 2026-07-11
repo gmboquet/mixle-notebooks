@@ -56,24 +56,13 @@ evidence. If a notebook times out, report the timeout value and do not mark the
 notebook as failed until the owner decides whether it needs a larger gate or a
 performance fix.
 
-Report Results
---------------
+Next Steps
+----------
 
-Every notebook run should record:
-
-* path;
-* timeout;
-* status: passed, failed, timed out, skipped, or blocked;
-* first meaningful error for failures;
-* optional dependency or data requirement;
-* whether outputs were intentionally refreshed.
-
-Read :doc:`authoring-guide` before adding new notebooks and
-:doc:`execution-runbook` before running a full bitrot pass.
-
-Quickstart Boundary
--------------------
-
-The quickstart proves that the environment can execute one notebook. It is not
-a substitute for a catalog-wide bitrot report. Use the execution manifest when
-claiming release health for the notebook collection.
+This proves the environment can execute one notebook — it isn't a
+catalog-wide bitrot report, and :doc:`notebook-execution-manifest` is the
+source of truth for release health across the collection. Read
+:doc:`authoring-guide` before adding new notebooks and
+:doc:`execution-runbook` before running a full sweep, which covers what to
+record per run (path, timeout, status, first meaningful error, and whether
+outputs were intentionally refreshed).
