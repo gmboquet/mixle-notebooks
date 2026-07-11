@@ -15,6 +15,47 @@ Execution Environment
 * Per-notebook timeout: 300s (light) / 700s (heavy). Date: 2026-07-10.
 * Full resolved environment: ``release-checklists/0.7.0-freeze.txt``.
 
+Re-verification (2026-07-11)
+-----------------------------
+
+The table below and the per-group lists were produced on 2026-07-10 against commit ``5f3e33a``.
+Five more commits landed the same day after that sweep, all reworking
+``tutorials/embedding_with_htsne.ipynb`` (and its ``docs/catalog.rst`` entry) end to end, finishing
+at ``603a1e4``. That means this manifest's "passed" line for that one notebook covered a version of
+it that no longer exists.
+
+* Re-executed ``tutorials/embedding_with_htsne.ipynb`` against the final tip ``603a1e4``, clean
+  ``mixle==0.7.0`` install, ``jupyter nbconvert --execute``, 700s timeout: **passed**. Narrative
+  claims in the notebook and in the ``catalog`` entry above (heterogeneous/incomplete-record purity
+  beating flatten-and-impute t-SNE, the ``AxisAlign`` hydropathy axis, ``embedding_health`` trust/
+  continuity) were checked against the fresh run's printed output and hold; the specific purity/
+  correlation numbers drift by a few hundredths run to run (the notebook does not pin every RNG
+  seed), which does not change any qualitative claim made in prose.
+* No other notebook's source changed between ``5f3e33a`` and ``603a1e4`` (``git diff --stat`` shows
+  only ``embedding_with_htsne.ipynb``, ``docs/catalog.rst``, and one ``requirements.txt`` line
+  across those five commits), so the remaining 120-notebook manifest below still describes what is
+  on the release branch. To confirm rather than assume that, 25 more notebooks spanning all five
+  groups (tutorials, data_science, applications, exploration_geoscience, architecture_studies),
+  chosen to include several 0.7.0 showcase notebooks and the one previously-fixed
+  ``radar_tomography``, were re-executed fresh against ``603a1e4`` on 2026-07-11 with a 560s
+  per-cell timeout: **23 passed clean**. The other 2 did not fail -- they are unchanged since the
+  2026-07-10 sweep and are not being re-claimed as newly verified here, just re-attempted and found
+  consistent with what that sweep already recorded:
+
+  * ``data_science/model_based_embeddings`` hit this pass's 560s per-cell timeout on its
+    ``htsne``/``humap`` embedding-fit cell. This is the same notebook the 2026-07-10 sweep already
+    flagged as needing a longer timeout than the standard tiers to pass; unchanged file, not a
+    regression, just not re-run to completion at this pass's shorter budget.
+  * ``applications/radar_tomography`` and ``exploration_geoscience/basin_thermal_history`` need
+    ``mixle-pde``, which this lighter verification environment does not install (see
+    ``release-checklists/0.7.0-freeze.txt`` for scope). Both passed in the 2026-07-10 sweep, which
+    did have ``mixle-pde`` installed, and neither file has changed since.
+* While re-executing, two genuine notebook bugs were found and fixed (unrelated to the hvis rework):
+  ``tutorials/model_parallel_estimation`` (a script-generation indentation bug that silently
+  defeated its own live two-rank demo every run) and ``data_science/market_basket_ibp`` (a stored
+  output cell leaking the release owner's absolute local path). Both re-executed clean after the
+  fix; see ``CHANGELOG.md``.
+
 Summary
 -------
 

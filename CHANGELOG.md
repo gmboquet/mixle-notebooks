@@ -2,6 +2,49 @@
 
 ## 0.7.0 - 2026-07-10
 
+### Changed (release-readiness verification pass, 2026-07-11)
+
+- `tutorials/embedding_with_htsne`: reworked five more times the same day as the
+  first 0.7.0 pass (protein-family embedding -> protein-binding recovery ->
+  edit-distance head-to-head -> six-class binding atlas -> final cut, which
+  drops the edit-distance baseline and refocuses on htsne's actual reason to
+  exist: heterogeneous, incomplete records t-SNE cannot take). None of that
+  churn was reflected in the execution manifest, which still described the
+  first-pass version. Re-executed against the final tip and confirmed clean;
+  the manifest and this changelog now describe the shipped notebook.
+- Re-sampled 24 additional notebooks (all five top-level groups) against a
+  clean `mixle==0.7.0` install to re-confirm the existing manifest's pass
+  count still holds on the current tip; see `docs/notebook-execution-manifest.rst`.
+- `README.md`'s notebook table still said "Four folders" and omitted
+  `exploration_geoscience/` entirely (added when the folder was, but the
+  top-level README wasn't updated to match, only the Sphinx catalog was).
+  Fixed to five folders with current per-folder counts.
+
+### Fixed (release-readiness verification pass, 2026-07-11)
+
+- `requirements.txt`: removed `rapidfuzz`, added for an edit-distance baseline
+  in an intermediate `embedding_with_htsne` draft that the final cut of the
+  notebook no longer uses. Nothing in the repo imports it.
+- `tutorials/model_parallel_estimation`: the live two-rank `torch.distributed`
+  demo always silently failed and printed a misleading "could not form a
+  process group here" message, blaming the environment. The actual cause was
+  a script-generation bug -- one `from mixle.inference import seq_estimate`
+  line inside the `textwrap.dedent()`-wrapped subprocess script was missing
+  its leading indentation, which collapses `dedent`'s common-whitespace
+  computation to nothing and leaves the generated script's first statement
+  indented, an `IndentationError` at parse time in the subprocess. Fixed the
+  indentation and, while there, dropped the hardcoded
+  `/Users/grantboquet/codex/mixle` `sys.path`/`PYTHONPATH` workaround it
+  didn't need (the subprocess already inherits `mixle` from the same
+  interpreter's installed environment via `sys.executable`). Re-executed:
+  the two-rank demo now genuinely runs and reports `OK`.
+- `data_science/market_basket_ibp`: a committed output cell printed the
+  release owner's resolved absolute data-directory path
+  (`/Users/grantboquet/codex/mixle-notebooks/data/online_retail_ii`), baked in
+  from whatever machine last executed the notebook before commit. Changed the
+  diagnostic to print a repo-relative path (`data/online_retail_ii`) and
+  re-executed to refresh all outputs.
+
 ### Added (second pass)
 
 - Four `data_science` notebooks closing the remaining mixle 0.7.0 feature-coverage

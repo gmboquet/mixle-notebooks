@@ -88,3 +88,59 @@ is not.
 
 **→ Gate:** §4 records every such notebook as `BLOCKED` with the specific missing prerequisite, so
 coverage is honest: passed + blocked-with-reason + failed must account for every notebook in scope.
+
+### L-0.7.0-5 — A notebook kept changing after the execution manifest was written, and nobody re-ran it
+
+**What happened.** `tutorials/embedding_with_htsne.ipynb` was reworked five more times the same day
+the execution manifest was produced (protein-family embedding → protein-binding recovery →
+edit-distance head-to-head → six-class binding atlas → the final cut, which drops the edit-distance
+comparison entirely). The manifest still said "passed" the whole time, but that claim covered
+whichever draft existed when the manifest was written, not the notebook that ended up on the branch.
+A stale `rapidfuzz` dependency from one of the intermediate drafts also shipped in `requirements.txt`
+after the final draft stopped needing it.
+
+**Root cause.** The checklist's evidence discipline requires evidence to cover "the exact commit that
+will be released," but nothing forced a re-check when a notebook changed *after* its manifest entry
+was written and before the branch was actually released. A checklist gate marked `DONE` earlier in
+the same release cycle can go stale mid-cycle.
+
+**→ Gate:** §4 (post-merge re-verification) now explicitly diffs the manifest's source commit against
+the release tip and re-executes anything that changed in between, not just anything that changed
+since the *previous release*. §5 (dependency correctness) re-derives "what notebooks import" rather
+than trusting the requirements list a prior pass produced.
+
+### L-0.7.0-6 — Checklist evidence cited a commit SHA that didn't exist in the repository
+
+**What happened.** The Sphinx docs-build gate's evidence line named commit `bdde3b1` as what was
+built and tested. That SHA is not reachable in this repository's history (`git cat-file -t bdde3b1`
+fails) — likely copied from a different working state that was later amended or rebased away. The
+gate's underlying claim (the docs build strict and clean) turned out to still be true when re-checked
+independently, but the evidence as written could not be verified against the actual repository.
+
+**Root cause.** Evidence discipline (see `README.md`) requires a commit SHA, but nothing checked that
+the SHA was real. A plausible-looking but unverifiable SHA is worse than an honest "not yet checked,"
+because it looks like evidence.
+
+**→ Gate:** when recording a commit SHA as evidence, verify it resolves in the repo you're releasing
+(`git cat-file -t <sha>`, or just re-run `git rev-parse HEAD` at the moment you record the evidence)
+before writing it down.
+
+### L-0.7.0-7 — A notebook's own output leaked the release owner's local filesystem path
+
+**What happened.** `data_science/market_basket_ibp.ipynb` had a committed output cell printing
+`data dir: /Users/grantboquet/codex/mixle-notebooks/data/online_retail_ii` — the absolute path
+resolved on whatever machine last executed the notebook before it was committed. Separately,
+`tutorials/model_parallel_estimation.ipynb` hardcoded the same kind of personal path
+(`/Users/grantboquet/codex/mixle`) directly into example code, as an unnecessary
+`sys.path`/`PYTHONPATH` workaround. Neither is a security leak (no credentials, no third-party data),
+but both are the kind of "obviously ran on someone's laptop" detail a public release shouldn't ship,
+and the hygiene gate had no scan behind it — it was still `TODO` when this pass started.
+
+**Root cause.** No gate actually ran a scan; "no secrets or private paths" was an aspiration, not a
+checked claim. A notebook that resolves and prints `Path.cwd()`-derived absolute paths will always
+leak whatever machine executed it last, by construction — that's a pattern worth catching, not just a
+one-off typo.
+
+**→ Gate:** §7 now records the actual scan commands run (secret-shaped strings, `/Users/`, `/home/`,
+email addresses) and their real output, not just a claim. When a notebook diagnostic must show a data
+location, prefer a repo-relative path over an absolute one.
