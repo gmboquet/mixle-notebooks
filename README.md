@@ -57,6 +57,10 @@ Five folders, organized by purpose — each has its own index. New here? Start w
 | [exploration_geoscience/](notebooks/exploration_geoscience) | 11 | Subsurface geoscience workflows — basin thermal history, tomography, provenance, kriging, well-log facies, and drilling decisions. |
 | [architecture_studies/](notebooks/architecture_studies) | 6 | How the library performs — timing and scaling studies of the library itself. |
 
+Every notebook is executed top-to-bottom on a clean kernel against the pinned mixle release; the full
+run manifest (121/121 clean, with per-notebook evidence) is in
+[`docs/notebook-execution-manifest.rst`](docs/notebook-execution-manifest.rst).
+
 ## Data
 
 `data/` ships the small datasets the notebooks use; notebooks load them with paths relative to their
