@@ -2,6 +2,33 @@
 
 ## 0.7.0 - 2026-07-10
 
+### Changed (blocked / slow-manual closure pass, 2026-07-11)
+
+- The execution manifest's 5 `BLOCKED` and 2 slow/manual notebooks had only ever been named and
+  skipped, never actually executed. This pass installed every missing prerequisite (HuggingFace
+  `datasets`/`transformers`/`timm`, a JVM + PySpark, an MPI runtime) in a fresh clone of the release
+  branch and executed all 7 for real, with no artificial timeout on the ones that needed longer than
+  the standard tiers: `data_science/enumerating_a_language_model`,
+  `data_science/reasoning_over_real_images`, `tutorials/parallel_estimation` (including a genuine
+  live two-rank `mpiexec` run), `tutorials/estimation_using_spark` (a real local `SparkContext`
+  running 55+ stages), `applications/malware_certificate_embedding`, and
+  `data_science/projecting_an_llm_onto_a_lookback_hmm` all passed clean on first attempt. The
+  execution manifest now reads 121/121 pass, 0 blocked, 0 slow/manual; see
+  `docs/notebook-execution-manifest.rst` "Closing the blocked / slow-manual gap (2026-07-11)".
+
+### Fixed (blocked / slow-manual closure pass, 2026-07-11)
+
+- `data_science/cifar10_conv_net_and_exact_head`: `datasets.load_dataset("cifar10")` uses a
+  script-based HuggingFace dataset id the Hub has since retired. It only appeared to work on the
+  verification machine because of a stale local cache left over from an unrelated earlier session,
+  which also leaked that machine's absolute home-directory path into a printed log line. Confirmed
+  with a genuinely empty `HF_HOME` that the old id now raises `HfUriError` outright. Switched to the
+  actively-maintained mirror `datasets.load_dataset("uoft-cs/cifar10")` (schema-identical: same
+  `img`/`label` features, same class names and order, same row counts) and re-executed clean from an
+  empty cache -- no cache-fallback warning, no leaked path, and the accuracy numbers are unchanged
+  (85.44% softmax / 88.15% exact Gaussian head) since both mirrors serve the same underlying images
+  and the notebook pins its RNG seeds.
+
 ### Changed (release-readiness verification pass, 2026-07-11)
 
 - `tutorials/embedding_with_htsne`: reworked five more times the same day as the

@@ -56,12 +56,76 @@ it that no longer exists.
   output cell leaking the release owner's absolute local path). Both re-executed clean after the
   fix; see ``CHANGELOG.md``.
 
+Closing the blocked / slow-manual gap (2026-07-11)
+---------------------------------------------------
+
+The 5 ``BLOCKED`` and 2 slow/manual notebooks left out of the sweeps above were never actually
+verified -- they were named and skipped. This pass installed every missing prerequisite in a fresh
+clone of the release branch and executed all 7 for real, from each notebook's own directory against
+the same ``mixle==0.7.0`` install used elsewhere in this manifest (kernel CPython 3.12).
+Prerequisites installed: ``datasets==5.0.0``, ``transformers==5.13.1``, ``timm==1.0.27`` (HuggingFace
+downloads); OpenJDK 17.0.19 (Homebrew ``openjdk@17``) + ``pyspark==4.1.2`` (JVM/Spark); Open MPI 5.0.9
+(Homebrew ``open-mpi``) + ``mpi4py==4.1.2`` (MPI). None of these touch ``mixle`` itself.
+
+* ``data_science/enumerating_a_language_model.ipynb`` -- ``jupyter nbconvert --execute``, 1200s
+  timeout: **passed**. Downloads ``distilgpt2`` from the HuggingFace Hub; enumeration/HMM output
+  matches the narrative.
+* ``data_science/reasoning_over_real_images.ipynb`` -- ``jupyter nbconvert --execute``, 1200s
+  timeout: **passed**. Downloads ``facebook/detr-resnet-50`` and three real COCO ``val2017`` images
+  over HTTP; detections render as described.
+* ``tutorials/parallel_estimation.ipynb`` -- ``jupyter nbconvert --execute``, 700s timeout:
+  **passed**. The ``local``/``mp``/``dask``/DataFrame backends all agree to the documented 1e-6
+  tolerance, and the live two-rank ``mpiexec -n 2`` SPMD demo genuinely ran and converged to fitted
+  means ``[-1.987, 2.011]`` against true means ``[-2.0, 2.0]``.
+* ``tutorials/estimation_using_spark.ipynb`` -- ``JAVA_HOME`` pointed at the Homebrew OpenJDK 17
+  install, ``jupyter nbconvert --execute``, 700s timeout: **passed**. A real local ``SparkContext``
+  ran 55+ stages end to end (RDD sampling, Spark-backed ``optimize``, ``sc.parallelize`` over the
+  Iliad text) with no errors.
+* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- **passed**, but only after a genuine
+  fix (see below). Real 24-epoch conv-net training on CIFAR-10 (MPS backend) took 1488s in the
+  single training cell alone, over the 1200s per-cell budget the other blocked notebooks used;
+  re-run with no per-cell timeout. Final softmax accuracy 85.44%, closed-form exact Gaussian head
+  88.15%, matching the notebook's "matches (here, slightly beats) the softmax" claim; the few-shot
+  new-class results (k=5/10/25/100) also match the narrative.
+* ``applications/malware_certificate_embedding.ipynb`` -- ``jupyter nbconvert --execute`` with no
+  timeout (``ExecutePreprocessor.timeout=-1``): **passed** in ~80 minutes wall clock (33 cells,
+  scaling to 500 certificates, both t-SNE and UMAP layouts, leave-one-out kNN and generative
+  attribution, open-set novelty detection, a temporal permutation test). Confirmed genuinely
+  defensive/detection content (public abuse.ch SSLBL certificate feed; malware-family labels used
+  only to score the unsupervised embedding after the fact, never to fit it) before running.
+  Narrative claims checked against output: the per-field evidence-capped ``'auto'`` affinity gets
+  the best 10-NN purity (0.773 vs. 0.495/0.456/0.371 for the alternatives), leave-one-out attribution
+  clears the majority baseline by a wide margin (0.920 model-based / 0.980 raw-token vs. 0.320), and
+  the open-set novelty AUC and issuance-burst permutation test (p=0.002) both hold as described.
+* ``data_science/projecting_an_llm_onto_a_lookback_hmm.ipynb`` -- ``jupyter nbconvert --execute``
+  with no timeout: **passed** in ~80 minutes wall clock (15 cells: GRU language-model training plus
+  several lookback-HMM streaming fits at increasing state counts). LM floor 2.38 bits/char, distilled
+  lookback HMM 3.24 bits/char, improving from 3.32 to 3.13 bits/char as states grow from 1 to 16 --
+  consistent with the notebook's variational-projection narrative.
+
+One genuine bug was found and fixed, unrelated to mixle itself:
+``data_science/cifar10_conv_net_and_exact_head.ipynb`` called ``datasets.load_dataset("cifar10")``,
+a script-based HuggingFace dataset id that the Hub has since removed. On this development machine
+the call silently "succeeded" only because a stale local cache from an earlier, unrelated session
+happened to already exist, which also leaked that machine's absolute home-directory path into the
+printed log line. Verified with an isolated, genuinely empty ``HF_HOME`` that
+``load_dataset("cifar10")`` now raises ``HfUriError`` outright -- this notebook would fail top to
+bottom for any other user or a real CI runner. Fixed by switching to the actively-maintained mirror
+``datasets.load_dataset("uoft-cs/cifar10")``, confirmed schema-identical (same ``img``/``label``
+features, same 10 class names in the same order, same 50000/10000 train/test row counts) and
+confirmed to download cleanly from an empty cache. Re-executed end to end after the fix: clean,
+no cache-fallback warning, no leaked path, and the numeric results are unchanged (same 85.44% /
+88.15% / few-shot figures as the pre-fix run, as expected since both mirrors serve the same
+underlying image bytes and the notebook pins its RNG seeds). See ``CHANGELOG.md``.
+
 Summary
 -------
 
-Of 121 notebooks: **114 executed clean**, **5 blocked** on an unavailable
-prerequisite (named below), and **2 slow/manual** (exceed the batch timeout or need a
-longer interactive run). No notebook fails on a mixle 0.7.0 API break.
+Of 121 notebooks: **121 executed clean**, **0 blocked**, **0 slow/manual**. No notebook fails on a
+mixle 0.7.0 API break. One genuine bug was found and fixed this pass (a stale HuggingFace dataset id
+in ``cifar10_conv_net_and_exact_head``; see "Closing the blocked / slow-manual gap" above); every
+other previously-blocked or slow/manual notebook executed clean on first attempt once its
+prerequisite was installed.
 
 .. list-table::
    :header-rows: 1
@@ -73,19 +137,19 @@ longer interactive run). No notebook fails on a mixle 0.7.0 API break.
      - Slow/manual
    * - ``notebooks/tutorials``
      - 12
-     - 10
-     - 2
+     - 12
+     - 0
      - 0
    * - ``notebooks/data_science``
      - 72
-     - 68
-     - 3
-     - 1
+     - 72
+     - 0
+     - 0
    * - ``notebooks/applications``
      - 20
-     - 19
+     - 20
      - 0
-     - 1
+     - 0
    * - ``notebooks/exploration_geoscience``
      - 11
      - 11
@@ -100,20 +164,20 @@ longer interactive run). No notebook fails on a mixle 0.7.0 API break.
 Blocked notebooks (named prerequisite)
 --------------------------------------
 
-* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- needs HuggingFace datasets + dataset download.
-* ``data_science/enumerating_a_language_model.ipynb`` -- needs transformers + model download.
-* ``data_science/reasoning_over_real_images.ipynb`` -- needs transformers + model download.
-* ``tutorials/estimation_using_spark.ipynb`` -- needs a JVM + PySpark.
-* ``tutorials/parallel_estimation.ipynb`` -- needs an MPI runtime.
+None. The 5 notebooks previously blocked on a missing prerequisite (HuggingFace ``datasets``,
+``transformers`` + model download, a JVM + PySpark, an MPI runtime) were closed out in the
+"Closing the blocked / slow-manual gap" pass above once each prerequisite was installed; all 5 now
+execute clean and are counted as ``passed`` below.
 
 Slow / manual notebooks
 -----------------------
 
-These exceed the batch timeout or need a longer interactive run; they are release-tier
-``manual`` and are not counted as API failures.
-
-* ``applications/malware_certificate_embedding.ipynb`` -- exceeds batch timeout.
-* ``data_science/projecting_an_llm_onto_a_lookback_hmm.ipynb`` -- exceeds batch timeout.
+None. The 2 notebooks previously deferred as exceeding the batch timeout were executed with no
+per-cell timeout in the pass above; both now execute clean (each real, non-artificial run took
+roughly 80 minutes wall clock) and are counted as ``passed`` below.
+``data_science/cifar10_conv_net_and_exact_head.ipynb`` similarly needed longer than the standard
+timeout tiers (its training cell alone runs ~25 minutes) but is tracked under "Blocked notebooks"
+above since a missing prerequisite, not the timeout, was its original gate.
 
 Per-group status
 ----------------
@@ -126,12 +190,12 @@ Tutorials
 * ``tutorials/distributions_and_combinators.ipynb`` -- passed
 * ``tutorials/embedding_with_htsne.ipynb`` -- passed
 * ``tutorials/enumeration.ipynb`` -- passed
-* ``tutorials/estimation_using_spark.ipynb`` -- blocked
+* ``tutorials/estimation_using_spark.ipynb`` -- passed
 * ``tutorials/fitting_and_estimation.ipynb`` -- passed
 * ``tutorials/latent_variable_models.ipynb`` -- passed
 * ``tutorials/mcmc_sampling.ipynb`` -- passed
 * ``tutorials/model_parallel_estimation.ipynb`` -- passed
-* ``tutorials/parallel_estimation.ipynb`` -- blocked
+* ``tutorials/parallel_estimation.ipynb`` -- passed
 * ``tutorials/probabilistic_programming.ipynb`` -- passed
 
 Data science
@@ -149,7 +213,7 @@ Data science
 * ``data_science/causal_inference_from_observational_data.ipynb`` -- passed
 * ``data_science/change_point_segmentation.ipynb`` -- passed
 * ``data_science/character_models_chow_liu.ipynb`` -- passed
-* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- blocked
+* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- passed
 * ``data_science/classification_metrics_and_calibration.ipynb`` -- passed
 * ``data_science/conformal_prediction.ipynb`` -- passed
 * ``data_science/conformal_uq_on_graphs.ipynb`` -- passed
@@ -163,7 +227,7 @@ Data science
 * ``data_science/density_estimation_mixtures_vs_kde.ipynb`` -- passed
 * ``data_science/directional_statistics.ipynb`` -- passed
 * ``data_science/em_and_map_strategies.ipynb`` -- passed
-* ``data_science/enumerating_a_language_model.ipynb`` -- blocked
+* ``data_science/enumerating_a_language_model.ipynb`` -- passed
 * ``data_science/experimental_designs.ipynb`` -- passed
 * ``data_science/exponential_families_and_conjugacy.ipynb`` -- passed
 * ``data_science/extreme_value_theory.ipynb`` -- passed
@@ -193,10 +257,10 @@ Data science
 * ``data_science/naive_bayes_text_classification.ipynb`` -- passed
 * ``data_science/networks_and_community_structure.ipynb`` -- passed
 * ``data_science/ppl_end_to_end_case_study.ipynb`` -- passed
-* ``data_science/projecting_an_llm_onto_a_lookback_hmm.ipynb`` -- manual (slow)
+* ``data_science/projecting_an_llm_onto_a_lookback_hmm.ipynb`` -- passed
 * ``data_science/quantile_regression.ipynb`` -- passed
 * ``data_science/ranking_and_combinatorial_models.ipynb`` -- passed
-* ``data_science/reasoning_over_real_images.ipynb`` -- blocked
+* ``data_science/reasoning_over_real_images.ipynb`` -- passed
 * ``data_science/receipts_and_replay.ipynb`` -- passed
 * ``data_science/regression_and_glms.ipynb`` -- passed
 * ``data_science/regularization_and_sparsity.ipynb`` -- passed
@@ -223,7 +287,7 @@ Applications
 * ``applications/knowledge_graph_umls.ipynb`` -- passed
 * ``applications/machine_translation_alignment.ipynb`` -- passed
 * ``applications/magma_reservoir_gravity_inversion.ipynb`` -- passed
-* ``applications/malware_certificate_embedding.ipynb`` -- manual (slow)
+* ``applications/malware_certificate_embedding.ipynb`` -- passed
 * ``applications/oil_exploration_decision.ipynb`` -- passed
 * ``applications/option_pricing_and_implied_volatility.ipynb`` -- passed
 * ``applications/radar_tomography.ipynb`` -- passed
