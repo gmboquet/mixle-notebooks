@@ -7,7 +7,6 @@ xlrd  # legacy .xls reader used by the geoscience basalt dataset loader
 bokeh
 jupyter_bokeh
 nltk
-rapidfuzz  # fast C Levenshtein for the edit-distance baseline
 scikit-learn
 torch
 sympy
