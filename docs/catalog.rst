@@ -55,6 +55,11 @@ its claims against ground truth or an explicit ledger.
     ``make_monotonic_mlp`` (monotonicity), ``HamiltonianNet`` (energy
     conservation), and ``build_product_energy_net`` to compose them.
 
+``data_science/structured_science_context``
+    A small 0.8.0 contract tutorial showing how mesh and mathematical-problem
+    objects, open knowledge gaps, required capabilities, and a lossless handoff
+    policy travel together between model contexts without flattening to prose.
+
 ``data_science/verifiable_design_loop``
     Honest de-novo optimization with ``mixle.doe``: a ``VerifiableOracle``
     (declared tier + per-evaluation receipt) drives the ``optimize_under_oracle``

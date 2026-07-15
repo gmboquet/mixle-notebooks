@@ -77,6 +77,12 @@ These exceed the batch timeout or need a longer interactive run; they are releas
 Per-group status
 ----------------
 
+0.8.0 additions
+~~~~~~~~~~~~~~~
+
+* ``data_science/structured_science_context.ipynb`` -- passed with the Python
+  3 standard-library kernel on 2026-07-15; contract-only smoke execution.
+
 Tutorials
 ~~~~~~~~~
 
@@ -217,4 +223,3 @@ Architecture studies
 * ``architecture_studies/model_scaling.ipynb`` -- passed
 * ``architecture_studies/parallel_scaling.ipynb`` -- passed
 * ``architecture_studies/ppl_scaling_vs_pyro_stan.ipynb`` -- passed
-
