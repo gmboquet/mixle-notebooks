@@ -1,5 +1,8 @@
 # mixle-notebooks
 
+![license](https://img.shields.io/badge/license-MIT-green)
+![notebooks](https://img.shields.io/badge/notebooks-124-brightgreen)
+
 Worked examples, courses, and benchmarks for
 [mixle](https://github.com/gmboquet/mixle) — composable, distributed density estimation
 for messy, mixed-type data. The library is published on PyPI as `mixle` (the import name is
@@ -53,14 +56,15 @@ Release notes and the current changelog are in
 
 ## The notebooks
 
-Four folders, organized by purpose — each has its own index. New here? Start with **tutorials/**.
+Five folders, organized by purpose — each has its own index. New here? Start with **tutorials/**.
 
 | Folder | | What it is |
 |---|--:|---|
 | [tutorials/](notebooks/tutorials) | 12 | How to call the API — lean, syntax-focused, synthetic data. |
-| [data_science/](notebooks/data_science) | 65 | A course in probabilistic data science — each method explained, derived, and evaluated on real data, foundations to capstone. |
-| [applications/](notebooks/applications) | 19 | End-to-end solutions to real domain problems (NLP, finance, networks, spatial statistics, physics-based inverse problems), each a worked solution in its field. |
-| [architecture_studies/](notebooks/architecture_studies) | 5 | How the library performs — timing and scaling studies of the library itself. |
+| [data_science/](notebooks/data_science) | 75 | A course in probabilistic data science — each method explained, derived, and evaluated on real data, foundations to capstone. |
+| [applications/](notebooks/applications) | 20 | End-to-end solutions to real domain problems (NLP, finance, networks, spatial statistics, physics-based inverse problems), each a worked solution in its field. |
+| [exploration_geoscience/](notebooks/exploration_geoscience) | 11 | Subsurface geoscience workflows — basin thermal history, tomography, provenance, kriging, well-log facies, and drilling decisions. |
+| [architecture_studies/](notebooks/architecture_studies) | 6 | How the library performs — timing and scaling studies of the library itself. |
 
 ## Data
 
@@ -77,6 +81,13 @@ folder (`../../data/...`). Sources:
 - `data/stocks/` — a simulated multi-asset daily price panel and an option chain for the finance notebooks.
 - Plus the Iliad text, SSL certificate records, a word list, NeurIPS submissions, and a Wikipedia corpus.
 
+## Maintainers & contributors
+
+Maintained by **Grant Boquet** ([@gmboquet](https://github.com/gmboquet) ·
+grant.boquet@gmail.com).
+
+Contributions, issues, and discussion are welcome — open a PR or an issue.
+
 ## License
 
-MIT, matching mixle.
+MIT — see [LICENSE](https://github.com/gmboquet/mixle-notebooks/blob/main/LICENSE).

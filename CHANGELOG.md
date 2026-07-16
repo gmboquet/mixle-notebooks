@@ -18,6 +18,33 @@
   `continuation.py` installs; it is not yet on a PyPI release or on `mixle-pde`'s `main`
   branch.
 
+### Fixed
+
+- Forward-ported four fixes that landed on `release/0.7.0` but never made it to
+  `release/0.8.0`:
+  - `data_science/cifar10_conv_net_and_exact_head`: `load_dataset("cifar10")` used a
+    script-based dataset id the Hub has retired; switched to the maintained mirror
+    `uoft-cs/cifar10` (schema-identical; re-verified it loads from an empty
+    `HF_HOME` and the notebook re-executes clean end to end).
+  - `data_science/market_basket_ibp`: a committed output cell printed the resolved
+    absolute data directory from whichever machine last executed the notebook;
+    now prints a repo-relative path.
+  - `tutorials/model_parallel_estimation`: the generated two-rank
+    `torch.distributed` subprocess script had one `from mixle.inference import
+    seq_estimate` line missing its indentation, which broke `textwrap.dedent()`
+    and crashed every run with a swallowed `IndentationError` misreported as an
+    environment problem; fixed the indentation and dropped the hardcoded
+    `/Users/.../mixle` `sys.path`/`PYTHONPATH` workaround it didn't need.
+  - `requirements.txt`: dropped the unused `rapidfuzz` dependency (added for an
+    edit-distance baseline that was later dropped from `embedding_with_htsne`;
+    nothing in the repo imports it).
+- `README.md`/`LICENSE`: the notebook-count table still said "Four folders" and
+  omitted `exploration_geoscience/` entirely, with per-folder counts stale since
+  before that folder was added; refreshed against the real tree (12/75/20/11/6 =
+  124 notebooks across five folders). `LICENSE` named an unrelated institutional
+  copyright holder left over from a template; corrected to match the convention
+  used by the rest of the `mixle` family.
+
 ## 0.7.0 - 2026-07-10
 
 ### Added (second pass)
