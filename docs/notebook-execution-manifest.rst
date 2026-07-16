@@ -82,6 +82,9 @@ Per-group status
 
 * ``data_science/structured_science_context.ipynb`` -- passed with the Python
   3 standard-library kernel on 2026-07-15; contract-only smoke execution.
+* ``data_science/adaptive_mesh_refinement.ipynb`` -- passed with ``mixle-sim``
+  and ``mixle-physics`` (``release/0.8.0``, editable source installs) on
+  2026-07-16; full top-to-bottom execution, 4 rendered figures, 0 errors.
 
 Tutorials
 ~~~~~~~~~

@@ -14,6 +14,8 @@ sympy
 mpi4py
 dask[distributed]
 mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git  # PDE/physics stack for the inverse-problem notebooks
+mixle-sim @ git+https://github.com/gmboquet/mixle-sim.git@release/0.8.0  # error_estimation (MP-F5) for adaptive_mesh_refinement
+mixle-physics @ git+https://github.com/gmboquet/mixle-physics.git@release/0.8.0  # mixle_sim's own package import needs this
 transformers
 timm
 Pillow

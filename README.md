@@ -17,12 +17,17 @@ jupyter lab notebooks/
 notebooks (`flow_inversion`, `oil_exploration_decision`, `radar_tomography`,
 `seismic_full_waveform_inversion`, `synthetic_aperture_sonar`, `bayesian_inverse_problems`) also need the
 **[`mixle-pde`](https://github.com/gmboquet/mixle-pde)** package — the differentiable PDE /
-physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) extracted out of `mixle`. To
-install the unreleased code directly:
+physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) extracted out of `mixle`.
+`data_science/adaptive_mesh_refinement` needs **[`mixle-sim`](https://github.com/gmboquet/mixle-sim)**
+(`release/0.8.0`, unreleased) for its new residual/jump error estimator and mesh adaptation
+(`error_estimation`), and, transitively, **[`mixle-physics`](https://github.com/gmboquet/mixle-physics)**
+(`mixle_sim`'s own package import pulls it in). To install the unreleased code directly:
 
 ```sh
 pip install "mixle[all] @ git+https://github.com/gmboquet/mixle.git"
 pip install "mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git"   # physics/PDE notebooks
+pip install "mixle-sim @ git+https://github.com/gmboquet/mixle-sim.git@release/0.8.0"        # adaptive mesh refinement
+pip install "mixle-physics @ git+https://github.com/gmboquet/mixle-physics.git@release/0.8.0" # mixle-sim's own dependency
 ```
 
 The Spark tutorial additionally needs a JVM (PySpark 4.x requires Java 17 or 21, e.g.
