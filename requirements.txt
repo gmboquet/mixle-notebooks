@@ -13,7 +13,7 @@ torch
 sympy
 mpi4py
 dask[distributed]
-mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git  # PDE/physics stack for the inverse-problem notebooks
+mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git@bcb91b1a0e1e34be8ecf446f5969161eff13855c  # PDE/physics stack for the inverse-problem notebooks; pinned to a release/0.8.0 commit so continuation.py (MP-F2, used by newton_continuation_and_folds) is included
 mixle-sim @ git+https://github.com/gmboquet/mixle-sim.git@release/0.8.0  # error_estimation (MP-F5) for adaptive_mesh_refinement
 mixle-physics @ git+https://github.com/gmboquet/mixle-physics.git@release/0.8.0  # mixle_sim's own package import needs this
 transformers

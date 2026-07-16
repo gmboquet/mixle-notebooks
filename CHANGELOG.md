@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.8.0 - Unreleased
+
+### Added
+
+- `data_science/newton_continuation_and_folds` - a tutorial for `mixle-pde`'s new
+  `continuation` module (MP-F2): `natural_continuation` steps a parameter directly and
+  fails honestly at a fold (a typed `failure_reason`, never a fabricated point), while
+  `arclength_continuation` (Keller 1977, pseudo-arclength) traces through the same fold
+  onto the far branch. Worked on the classic Bratu equation, with the traced fold checked
+  against a closed-form reference and the discretization gap shown shrinking under mesh
+  refinement.
+
+### Changed
+
+- `requirements.txt`: pin `mixle-pde` to `release/0.8.0` commit `bcb91b1` so
+  `continuation.py` installs; it is not yet on a PyPI release or on `mixle-pde`'s `main`
+  branch.
+
 ## 0.7.0 - 2026-07-10
 
 ### Added (second pass)

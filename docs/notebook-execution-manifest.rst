@@ -85,6 +85,10 @@ Per-group status
 * ``data_science/adaptive_mesh_refinement.ipynb`` -- passed with ``mixle-sim``
   and ``mixle-physics`` (``release/0.8.0``, editable source installs) on
   2026-07-16; full top-to-bottom execution, 4 rendered figures, 0 errors.
+* ``data_science/newton_continuation_and_folds.ipynb`` -- passed with
+  ``jupyter nbconvert --execute`` (CPython 3.14.5) on 2026-07-16, against
+  ``mixle-pde`` ``release/0.8.0`` commit ``bcb91b1`` (``continuation.py``,
+  MP-F2); every numeric claim in the notebook is asserted, not just printed.
 
 Tutorials
 ~~~~~~~~~

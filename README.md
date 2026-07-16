@@ -18,6 +18,10 @@ notebooks (`flow_inversion`, `oil_exploration_decision`, `radar_tomography`,
 `seismic_full_waveform_inversion`, `synthetic_aperture_sonar`, `bayesian_inverse_problems`) also need the
 **[`mixle-pde`](https://github.com/gmboquet/mixle-pde)** package — the differentiable PDE /
 physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) extracted out of `mixle`.
+`data_science/newton_continuation_and_folds` needs it too, for the `continuation` module
+(natural- and pseudo-arclength parameter continuation); `requirements.txt` pins `mixle-pde` to a
+`release/0.8.0` commit so that module is included, since it isn't on a PyPI release or on
+`mixle-pde`'s `main` branch yet.
 `data_science/adaptive_mesh_refinement` needs **[`mixle-sim`](https://github.com/gmboquet/mixle-sim)**
 (`release/0.8.0`, unreleased) for its new residual/jump error estimator and mesh adaptation
 (`error_estimation`), and, transitively, **[`mixle-physics`](https://github.com/gmboquet/mixle-physics)**
