@@ -72,6 +72,20 @@ its claims against ground truth or an explicit ledger.
     gives a deterministic model-derived layout, and ``StreamingHvis`` places
     arriving batches against a fixed atlas.
 
+mixle-pde 0.8.0 additions
+--------------------------
+
+These ``data_science`` notebooks exercise capabilities newly added to the sibling ``mixle-pde``
+package on its ``release/0.8.0`` branch. Each checks its claims against an independent reference
+rather than just plotting a result and trusting it.
+
+``data_science/newton_continuation_and_folds``
+    ``mixle_pde.continuation`` (workstream MP-F2) traces a solution branch of the classic Bratu
+    equation two ways: ``natural_continuation``, which cannot cross a fold and fails honestly (a
+    typed ``failure_reason``, never a fabricated point), and ``arclength_continuation`` (Keller
+    1977), which does. The traced fold is checked against the closed-form reference location, and
+    the gap between them is shown shrinking under mesh refinement rather than asserted on faith.
+
 The ``embedding_with_htsne`` tutorial shows htsne's reason to exist: embedding
 **heterogeneous, incomplete records** that t-SNE cannot take. Each protein is a
 mixed-type record -- a real (hydropathy), a categorical (fold), a set of tags,
