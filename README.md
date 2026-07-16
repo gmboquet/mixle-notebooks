@@ -17,8 +17,11 @@ jupyter lab notebooks/
 notebooks (`flow_inversion`, `oil_exploration_decision`, `radar_tomography`,
 `seismic_full_waveform_inversion`, `synthetic_aperture_sonar`, `bayesian_inverse_problems`) also need the
 **[`mixle-pde`](https://github.com/gmboquet/mixle-pde)** package — the differentiable PDE /
-physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) extracted out of `mixle`. To
-install the unreleased code directly:
+physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) extracted out of `mixle`.
+`data_science/newton_continuation_and_folds` needs it too, for the `continuation` module
+(natural- and pseudo-arclength parameter continuation); `requirements.txt` pins `mixle-pde` to a
+`release/0.8.0` commit so that module is included, since it isn't on a PyPI release or on
+`mixle-pde`'s `main` branch yet. To install the unreleased code directly:
 
 ```sh
 pip install "mixle[all] @ git+https://github.com/gmboquet/mixle.git"
