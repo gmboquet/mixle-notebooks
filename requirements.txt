@@ -16,6 +16,7 @@ mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git@bcb91b1a0e1e34be8ecf44
 mixle-sim @ git+https://github.com/gmboquet/mixle-sim.git@release/0.8.0  # error_estimation (MP-F5) for adaptive_mesh_refinement
 mixle-physics @ git+https://github.com/gmboquet/mixle-physics.git@release/0.8.0  # mixle_sim's own package import needs this
 transformers
+datasets  # load_dataset(...) for cifar10_conv_net_and_exact_head and friends; not pulled in by transformers itself
 timm
 Pillow
 nbmake  # pytest --nbmake notebooks/applications/pillar_validation/ (CI execution of the validation notebooks)

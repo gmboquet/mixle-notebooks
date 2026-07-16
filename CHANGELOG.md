@@ -44,6 +44,11 @@
   124 notebooks across five folders). `LICENSE` named an unrelated institutional
   copyright holder left over from a template; corrected to match the convention
   used by the rest of the `mixle` family.
+- `requirements.txt`: added the missing `datasets` dependency. Nothing installed
+  it transitively (it isn't a hard dependency of `transformers`), so
+  `cifar10_conv_net_and_exact_head` (and only that notebook) failed with
+  `ModuleNotFoundError: No module named 'datasets'` on a clean environment; this
+  predated the 0.7.0 gap above and affected both release branches.
 
 ## 0.7.0 - 2026-07-10
 
