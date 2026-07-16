@@ -97,6 +97,18 @@ informative missingness that htsne's ``Optional`` field keeps as signal. It then
 showcases the new hvis ``goals`` (``AxisAlign`` giving the map a hydropathy
 axis) and ``embedding_health`` (trustworthiness/continuity receipt).
 
+``data_science/adaptive_mesh_refinement``
+    mixle-sim's new residual/jump error estimator and marking-driven mesh
+    adaptation (``estimate_residual_indicators`` / ``mark_cells`` /
+    ``refine_marked_cells`` / ``drive_adaptation``): validated against an
+    independently computed true error on a manufactured 2-D Poisson problem
+    (Spearman correlation 0.91), then driven in a loop. The result is honest
+    on both sides -- a real ~5% matched-DOF accuracy gain while element quality
+    holds, and a real failure mode once it doesn't (naive repeated marking
+    collapses the minimum mesh angle on a fixed geometric schedule, ~3x per
+    generation, which ``mesh_quality_2d`` catches and a quality-gated loop
+    avoids).
+
 Applications
 ------------
 
