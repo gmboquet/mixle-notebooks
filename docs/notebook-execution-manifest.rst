@@ -18,9 +18,11 @@ Execution Environment
 Summary
 -------
 
-Of 121 notebooks: **114 executed clean**, **5 blocked** on an unavailable
+Of 121 notebooks: **115 executed clean**, **4 blocked** on an unavailable
 prerequisite (named below), and **2 slow/manual** (exceed the batch timeout or need a
-longer interactive run). No notebook fails on a mixle 0.7.0 API break.
+longer interactive run). No notebook fails on a mixle 0.7.0 API break. (One notebook,
+``cifar10_conv_net_and_exact_head``, moved from blocked to passed in the 0.8.0 corrections
+pass below -- see "0.8.0 corrections".)
 
 .. list-table::
    :header-rows: 1
@@ -37,8 +39,8 @@ longer interactive run). No notebook fails on a mixle 0.7.0 API break.
      - 0
    * - ``notebooks/data_science``
      - 72
-     - 68
-     - 3
+     - 69
+     - 2
      - 1
    * - ``notebooks/applications``
      - 20
@@ -59,7 +61,6 @@ longer interactive run). No notebook fails on a mixle 0.7.0 API break.
 Blocked notebooks (named prerequisite)
 --------------------------------------
 
-* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- needs HuggingFace datasets + dataset download.
 * ``data_science/enumerating_a_language_model.ipynb`` -- needs transformers + model download.
 * ``data_science/reasoning_over_real_images.ipynb`` -- needs transformers + model download.
 * ``tutorials/estimation_using_spark.ipynb`` -- needs a JVM + PySpark.
@@ -89,6 +90,28 @@ Per-group status
   ``jupyter nbconvert --execute`` (CPython 3.14.5) on 2026-07-16, against
   ``mixle-pde`` ``release/0.8.0`` commit ``bcb91b1`` (``continuation.py``,
   MP-F2); every numeric claim in the notebook is asserted, not just printed.
+
+0.8.0 corrections (forward-ported from release/0.7.0)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Four fixes landed on ``release/0.7.0`` (2026-07-11) but were never forward-ported to
+``release/0.8.0`` until this pass (2026-07-16); see ``CHANGELOG.md`` for the full list. Of these,
+one changes a status recorded below:
+
+* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- was **blocked** in the 0.7.0 sweep
+  above on a stale ``datasets.load_dataset("cifar10")`` id (the Hub has since retired that
+  script-based id). Fixed to the maintained mirror ``uoft-cs/cifar10`` and re-executed with
+  ``jupyter nbconvert --execute`` against a genuinely empty ``HF_HOME``: **passed**. Real 24-epoch
+  conv-net training (MPS backend, 931s) reached 87.91% test accuracy; the closed-form exact
+  Gaussian head reached 88.99%; few-shot new-class recall (k=5/10/25/100) matches the narrative.
+  Reflected in the Summary, the per-group table, and the ``data_science`` status line below.
+
+The other three forward-ported fixes (``requirements.txt`` dropping unused ``rapidfuzz``,
+``tutorials/model_parallel_estimation``'s live two-rank demo, and
+``data_science/market_basket_ibp``'s leaked local path) touch notebooks already recorded
+``passed`` above -- both re-executed clean after their fix and remain ``passed``, so no status
+changes below. The other 4 notebooks in "Blocked notebooks" and both in "Slow / manual notebooks"
+were not touched by this pass and remain as the 0.7.0 sweep left them.
 
 Tutorials
 ~~~~~~~~~
@@ -121,7 +144,7 @@ Data science
 * ``data_science/causal_inference_from_observational_data.ipynb`` -- passed
 * ``data_science/change_point_segmentation.ipynb`` -- passed
 * ``data_science/character_models_chow_liu.ipynb`` -- passed
-* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- blocked
+* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- passed (see "0.8.0 corrections")
 * ``data_science/classification_metrics_and_calibration.ipynb`` -- passed
 * ``data_science/conformal_prediction.ipynb`` -- passed
 * ``data_science/conformal_uq_on_graphs.ipynb`` -- passed
