@@ -16,6 +16,10 @@ _HERE = Path(__file__).resolve().parent
 _SIBLINGS = {
     "mixle": _HERE.parent / "mixle" / "mixle" / "__init__.py",
     "mixle_pde": _HERE.parent / "mixle-pde" / "mixle_pde" / "__init__.py",
+    # mixle-sim is a separate package, not a former name of mixle-pde: it owns the FEM/adaptivity
+    # surface (Domain2D, assemble_p1_diffusion, error_estimation.drive_adaptation, ...) that
+    # mixle_pde does not provide under any name, and adaptive_mesh_refinement imports it.
+    "mixle_sim": _HERE.parent / "mixle-sim" / "mixle_sim" / "__init__.py",
 }
 
 _extra = [
