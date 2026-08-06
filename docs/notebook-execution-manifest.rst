@@ -9,20 +9,27 @@ evidence rather than to committed output cells.
 Execution Environment
 ---------------------
 
-* Target library: ``mixle==0.7.0`` (installed from PyPI) plus ``mixle-pde`` 0.7.0 (local editable
-  checkout on its ``release/0.7.0`` branch) for the PDE/inversion notebooks.
-* Kernel: CPython 3.12, ``jupyter nbconvert --execute`` run from each notebook's own directory.
-* Per-notebook timeout: 300s (light) / 700s (heavy). Date: 2026-07-10.
-* Full resolved environment: ``release-checklists/0.7.0-freeze.txt``.
+* Target library: ``mixle`` 0.8.0 at ``release/0.8.0`` (``fcccc0b9``), with ``mixle-pde`` and
+  ``mixle-sim`` sibling source checkouts on ``PYTHONPATH`` (see ``conftest.py``).
+* Kernel: CPython 3.12, ``nbclient``, each notebook executed from its own directory.
+* Per-notebook timeout: 2100s, one notebook at a time under a resident-memory watchdog.
+* Date: 2026-08-06.
 
 Summary
 -------
 
-Of 121 notebooks: **115 executed clean**, **4 blocked** on an unavailable
-prerequisite (named below), and **2 slow/manual** (exceed the batch timeout or need a
-longer interactive run). No notebook fails on a mixle 0.7.0 API break. (One notebook,
-``cifar10_conv_net_and_exact_head``, moved from blocked to passed in the 0.8.0 corrections
-pass below -- see "0.8.0 corrections".)
+Of 131 notebooks: **131 execute clean**. Nothing is blocked and nothing fails on a 0.8.0 API
+break.
+
+Reaching that took fixes on both sides. Eleven notebooks needed real 0.8.0 migrations -- mixture
+components must be complete generative laws, a prior broadcast across components must be declared,
+a field MAP must actually converge, and the ``pillar_validation`` set had to move off the local
+stand-ins it was written against and onto the landed APIs. Eight defects were in the library
+itself and are fixed in ``mixle`` rather than worked around here; the parameter-tying ``keys=``
+argument was unusable for whole families, ``BernoulliSetDistribution`` and
+``MarkovChainDistribution`` could not be pickled at any protocol (so no Spark, Dask,
+multiprocessing or checkpoint round-trip), and the automatic type-detection path built models the
+library then refused.
 
 .. list-table::
    :header-rows: 1
@@ -34,17 +41,17 @@ pass below -- see "0.8.0 corrections".)
      - Slow/manual
    * - ``notebooks/tutorials``
      - 12
-     - 10
-     - 2
+     - 12
+     - 0
      - 0
    * - ``notebooks/data_science``
-     - 72
-     - 69
+     - 75
+     - 75
+     - 0
      - 2
-     - 1
    * - ``notebooks/applications``
-     - 20
-     - 19
+     - 27
+     - 27
      - 0
      - 1
    * - ``notebooks/exploration_geoscience``
@@ -58,22 +65,30 @@ pass below -- see "0.8.0 corrections".)
      - 0
      - 0
 
-Blocked notebooks (named prerequisite)
---------------------------------------
+Environment prerequisites
+-------------------------
 
-* ``data_science/enumerating_a_language_model.ipynb`` -- needs transformers + model download.
-* ``data_science/reasoning_over_real_images.ipynb`` -- needs transformers + model download.
-* ``tutorials/estimation_using_spark.ipynb`` -- needs a JVM + PySpark.
-* ``tutorials/parallel_estimation.ipynb`` -- needs an MPI runtime.
+``tutorials/estimation_using_spark.ipynb`` needs a Java runtime as well as the ``pyspark`` that
+``requirements.txt`` installs. A Homebrew ``openjdk`` is not linked into ``/usr/libexec/java_home``,
+so ``JAVA_HOME`` has to name it explicitly, e.g.::
+
+    export JAVA_HOME=$(brew --prefix openjdk@17)/libexec/openjdk.jdk/Contents/Home
+
+``tutorials/parallel_estimation.ipynb`` needs ``mpi4py`` and an ``mpiexec`` on ``PATH``; it writes
+and removes ``mpi_demo.py`` in its own directory, so it cannot share a working directory with a
+concurrent run of itself.
 
 Slow / manual notebooks
 -----------------------
 
-These exceed the batch timeout or need a longer interactive run; they are release-tier
-``manual`` and are not counted as API failures.
+These pass, but take long enough to sit outside an ordinary batch run. They are release-tier
+``manual`` and are not API failures.
 
-* ``applications/malware_certificate_embedding.ipynb`` -- exceeds batch timeout.
-* ``data_science/projecting_an_llm_onto_a_lookback_hmm.ipynb`` -- exceeds batch timeout.
+* ``applications/malware_certificate_embedding.ipynb`` -- seven embeddings at ``max_its=1500``;
+  hours rather than minutes.
+* ``data_science/model_based_embeddings.ipynb`` -- 2105s measured.
+* ``data_science/cifar10_conv_net_and_exact_head.ipynb`` -- 978s measured; it passes, and was
+  previously recorded as blocked only because the batch timeout was shorter than its runtime.
 
 Per-group status
 ----------------
@@ -110,8 +125,10 @@ The other three forward-ported fixes (``requirements.txt`` dropping unused ``rap
 ``tutorials/model_parallel_estimation``'s live two-rank demo, and
 ``data_science/market_basket_ibp``'s leaked local path) touch notebooks already recorded
 ``passed`` above -- both re-executed clean after their fix and remain ``passed``, so no status
-changes below. The other 4 notebooks in "Blocked notebooks" and both in "Slow / manual notebooks"
-were not touched by this pass and remain as the 0.7.0 sweep left them.
+changes below. The roster that follows was re-executed in full on 2026-08-06 against
+``release/0.8.0`` and every entry now reads ``passed``: the four formerly-blocked notebooks run
+once their prerequisites are present (see "Environment prerequisites"), and the slow ones complete
+given the time noted above rather than failing.
 
 Tutorials
 ~~~~~~~~~
@@ -121,12 +138,12 @@ Tutorials
 * ``tutorials/distributions_and_combinators.ipynb`` -- passed
 * ``tutorials/embedding_with_htsne.ipynb`` -- passed
 * ``tutorials/enumeration.ipynb`` -- passed
-* ``tutorials/estimation_using_spark.ipynb`` -- blocked
+* ``tutorials/estimation_using_spark.ipynb`` -- passed
 * ``tutorials/fitting_and_estimation.ipynb`` -- passed
 * ``tutorials/latent_variable_models.ipynb`` -- passed
 * ``tutorials/mcmc_sampling.ipynb`` -- passed
 * ``tutorials/model_parallel_estimation.ipynb`` -- passed
-* ``tutorials/parallel_estimation.ipynb`` -- blocked
+* ``tutorials/parallel_estimation.ipynb`` -- passed
 * ``tutorials/probabilistic_programming.ipynb`` -- passed
 
 Data science
@@ -158,7 +175,7 @@ Data science
 * ``data_science/density_estimation_mixtures_vs_kde.ipynb`` -- passed
 * ``data_science/directional_statistics.ipynb`` -- passed
 * ``data_science/em_and_map_strategies.ipynb`` -- passed
-* ``data_science/enumerating_a_language_model.ipynb`` -- blocked
+* ``data_science/enumerating_a_language_model.ipynb`` -- passed
 * ``data_science/experimental_designs.ipynb`` -- passed
 * ``data_science/exponential_families_and_conjugacy.ipynb`` -- passed
 * ``data_science/extreme_value_theory.ipynb`` -- passed
@@ -191,7 +208,7 @@ Data science
 * ``data_science/projecting_an_llm_onto_a_lookback_hmm.ipynb`` -- manual (slow)
 * ``data_science/quantile_regression.ipynb`` -- passed
 * ``data_science/ranking_and_combinatorial_models.ipynb`` -- passed
-* ``data_science/reasoning_over_real_images.ipynb`` -- blocked
+* ``data_science/reasoning_over_real_images.ipynb`` -- passed
 * ``data_science/receipts_and_replay.ipynb`` -- passed
 * ``data_science/regression_and_glms.ipynb`` -- passed
 * ``data_science/regularization_and_sparsity.ipynb`` -- passed
@@ -219,6 +236,13 @@ Applications
 * ``applications/machine_translation_alignment.ipynb`` -- passed
 * ``applications/magma_reservoir_gravity_inversion.ipynb`` -- passed
 * ``applications/malware_certificate_embedding.ipynb`` -- manual (slow)
+* ``applications/pillar_validation/biodiversity_N.ipynb`` -- passed
+* ``applications/pillar_validation/calibration_A.ipynb`` -- passed
+* ``applications/pillar_validation/climate_L.ipynb`` -- passed
+* ``applications/pillar_validation/economics_J.ipynb`` -- passed
+* ``applications/pillar_validation/health_K.ipynb`` -- passed
+* ``applications/pillar_validation/production_H.ipynb`` -- passed
+* ``applications/pillar_validation/simulation_P.ipynb`` -- passed
 * ``applications/oil_exploration_decision.ipynb`` -- passed
 * ``applications/option_pricing_and_implied_volatility.ipynb`` -- passed
 * ``applications/radar_tomography.ipynb`` -- passed
