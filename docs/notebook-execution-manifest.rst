@@ -6,6 +6,55 @@ This page is the release-facing execution manifest for ``mixle-notebooks``. Unli
 status of every shipped notebook against the release target, so a release claim points to
 evidence rather than to committed output cells.
 
+Round 2 -- 2026-08-10 (current)
+--------------------------------
+
+Re-executed the full corpus against the current ``release/0.8.0`` tip (``7f0c7bd1``), because the
+2026-08-06 round below predates a large adversarial statistical-review campaign (passes 2-23) that
+changed public behavior on several surfaces these notebooks exercise -- event studies, conformal
+prediction, calibration gates, ensemble MCMC diagnostics, LLM answer calibration. Method unchanged
+from Round 1: each notebook executed from its own directory, one at a time under a resident-memory
+and free-disk watchdog (this run additionally bounded per-notebook resident memory, since it shared
+a loaded machine with other work), 2100s default timeout.
+
+**130 of 131 execute clean**, including every notebook that exercises a surface the review campaign
+touched (``conformal_prediction``, ``conformal_uq_on_graphs``, ``cross_modal_belief_transport``,
+``mcmc_uncertainty_quantification``, ``regression_and_glms``, ``information_theory_in_practice``) --
+zero regressions from that campaign reached this corpus.
+
+Re-running did find one real defect, unrelated to the review campaign: ``optimize()`` over a Spark
+RDD (``tutorials/estimation_using_spark.ipynb``) crashed whenever a partition routed zero rows to a
+mixture's Markov-chain component, because ``MarkovChainAccumulator.value()`` hard-refused on any
+accumulator holding no data -- a guard meant to catch a misconfigured estimator that also fired on
+the legitimate empty state Spark's shuffle-merge produces. Fixed in ``mixle`` (commit ``a5dd09d9``,
+decision ``D-0174``); the notebook now executes clean.
+
+One notebook is a known, out-of-scope environment limitation rather than a 0.8.0 defect:
+``data_science/adaptive_mesh_refinement.ipynb`` needs the ``mixle-sim`` sibling checkout, and the
+local checkout this round found was mid-flight on an unrelated feature branch missing the
+``error_estimation`` module the notebook imports, not on ``release/0.8.0``. Not re-workable from a
+notebook-corpus evaluation pass; needs the ``mixle-sim`` checkout returned to ``release/0.8.0``
+before its next run.
+
+Two apparent slowdowns during the run resolved on retry with more headroom and turned out to be
+ordinary machine contention, not regressions: ``cifar10_conv_net_and_exact_head`` (hit its 2100s
+batch timeout once, passed at 1396s on retry -- both above and below its Round 1 baseline of
+931-978s, consistent with load rather than a changed cost) and
+``applications/seismic_full_waveform_inversion`` (killed by the run's outer wall-clock cap at
+3170s -- a multi-cell notebook where no single cell exceeds nbclient's per-cell timeout can still
+exceed a tighter whole-notebook cap -- passed at 431s on retry). Two environment gaps in the
+execution venv, unrelated to mixle itself, were also closed: ``pyspark`` and the ``dask[distributed]``
+extra were both missing despite being required by ``tutorials/estimation_using_spark.ipynb`` and
+``tutorials/parallel_estimation.ipynb`` respectively; both are now installed and both notebooks pass.
+
+``applications/malware_certificate_embedding.ipynb``, run separately from the batch given its
+recorded multi-hour cost, completed in 3032s (about 51 minutes) -- well under the "hours" Round 1
+recorded, the same contention pattern as the two retries above.
+
+Round 1 -- 2026-08-06 (superseded environment identity; per-notebook results below still current
+except where noted)
+-----------------------------------------------------------------------------------------------------
+
 Execution Environment
 ---------------------
 
@@ -101,6 +150,10 @@ Per-group status
 * ``data_science/adaptive_mesh_refinement.ipynb`` -- passed with ``mixle-sim``
   and ``mixle-physics`` (``release/0.8.0``, editable source installs) on
   2026-07-16; full top-to-bottom execution, 4 rendered figures, 0 errors.
+  **Not reproduced on 2026-08-10**: the local ``mixle-sim`` checkout that round
+  found was on an unrelated feature branch missing ``error_estimation``, not on
+  ``release/0.8.0`` -- see "Round 2" above. Needs the sibling checkout restored
+  before its next re-run.
 * ``data_science/newton_continuation_and_folds.ipynb`` -- passed with
   ``jupyter nbconvert --execute`` (CPython 3.14.5) on 2026-07-16, against
   ``mixle-pde`` ``release/0.8.0`` commit ``bcb91b1`` (``continuation.py``,
