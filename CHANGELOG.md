@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.8.2 - Unreleased
+
+### Fixed
+
+Repairs for the notebook findings the ten adversarial reviews of the 0.8.1 candidate deferred to
+this release (`mixle`'s `release-checklists/0.8.2-followups.md`), all re-executed against the
+repaired library.
+
+- `applications/knowledge_graph_umls` reads the tail conditional it says it is reporting.
+  `KnowledgeGraphDistribution.log_density` is the JOINT `log p(h, r, t)`, so comparing it with a
+  `-log(entities)` tail baseline made the model look worse than uniform (-12.118 against -4.905)
+  when the conditional it meant is -3.384, well above it. The cell now calls `tail_log_posterior`
+  (P07-F06).
+- `applications/bayesian_tweet_rhythm`, `option_pricing_and_implied_volatility` and
+  `fake_news_detection` fit the distributions they compare. A distribution written with all-constant
+  parameters has nothing to fit and `.fit()` returns it unchanged, so the printed likelihoods were
+  those of the placeholder values -- which made a fitted-Poisson-vs-negative-binomial comparison
+  meaningless and stated outright that a Student-t log-likelihood of -1554 "beats" a Gaussian -527.
+  The parameters the estimator moves are now `free`; the Student-t's degrees of freedom stays a
+  named constant, because that estimator is a fixed-df moment fit and mixle now says so (P07-F03).
+- `applications/baseball_hierarchical_shrinkage` samples its grouped Bernoulli-Beta posterior
+  instead of falling back to the grid: the library path it needs works again (P07-F04).
+- `applications/retail_trend_statespace` fits its local-level model to convergence and states what
+  "matches" means: the two smoothers agree to 7e-15 over 739 days, and the whole disagreement is a
+  thirty-day initial-state transient, not the 3.3 an under-budgeted fit produced (P07-F05).
+- `architecture_studies/ppl_scaling_vs_pyro_stan`'s takeaway describes a constant factor to be
+  re-measured rather than "1-2 orders of magnitude", because the gradient baseline's own backend has
+  become several times faster since the stored run; the conjugate-vs-sampling gap, which is about
+  the method rather than either implementation, keeps its "hundreds of times". `engine_benchmarks`
+  says plainly that numba does not always beat numpy on an already-vectorized E-step. Every
+  architecture study's stored timings are this host's (P07-F11).
+- `data_science/heterogeneous_mixed_type_modeling` compares its heterogeneous and numeric-only
+  clusterings at the SAME cluster budget. Letting the DP choose its own number for each input meant
+  the comparison measured how many clusters each input made it want: numeric-only "beat" the full
+  record 0.759 to 0.658. Controlled, the full record wins 0.883 to 0.661, and the per-field ablation
+  is reported beside the group ablation, which is what shows the non-numeric fields to be jointly
+  worth 0.331 and individually redundant (P08-F09).
+- `data_science/latent_models_in_practice` reads its one-shot fit's own receipt. That fit lands a
+  nested component with a variance of 1e-13 carrying 0.2% of the weight; the library now discloses
+  it, the notebook prints the effective rows each component won (0.71 for two parameters), and the
+  prose makes it the lesson the section is there to teach (P08-F10).
+
 ## 0.8.0 - Unreleased
 
 ### Added
