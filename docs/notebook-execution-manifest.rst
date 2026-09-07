@@ -6,8 +6,33 @@ This page is the release-facing execution manifest for ``mixle-notebooks``. Unli
 status of every shipped notebook against the release target, so a release claim points to
 evidence rather than to committed output cells.
 
-Round 2 -- 2026-08-10 (current)
+Round 3 -- 2026-09-07 (current)
 --------------------------------
+
+Re-executed the full corpus **in place** (committed output cells are this round's) against the
+``mixle`` 0.8.1 release candidate: the repaired candidate wheel built from ``release/0.8.1`` after
+the ten adversarial review passes (mixle ``release-checklists/0.8.1-reviews/``), installed in a
+fresh venv with the corpus requirements plus ``pyspark`` (JDK 17) and ``peft``. Method: each
+notebook executed from its own directory by ``jupyter nbconvert --execute --inplace``, six at a
+time, 1800 s per cell (5400 s for ``malware_certificate_embedding``, whose Round 2 solo cost was
+51 minutes); ``OMP/OPENBLAS/MKL_NUM_THREADS=2``, ``PYTHONHASHSEED=0``.
+
+**131 of 131 execute clean** (exit 0 for every notebook, including the three previously deferred as environment gaps: the Spark tutorial under JDK 17, ``parallel_estimation`` with ``mpiexec`` on ``PATH``, and the certificate embedding at its solo budget, 2761 s); ``adaptive_mesh_refinement`` executes against the ``mixle-sim``/``mixle-physics`` pins in ``requirements.txt``.
+
+This round also carries the corpus fixes the adversarial passes asked for: the product's old
+name and three removed module paths (``mixle.utils.em`` / ``objectives`` / ``mcmc``) replaced in
+the prose, the nonexistent ``iterate`` entry point removed from the tutorials and their index,
+the joint-mixture tutorials built on ``joint_weights`` (the deprecated ``w2``/``taus21`` form
+described a different law from the one sampled), the receipts notebook carrying the
+``executables`` and ``sources`` shapes ``verify_receipt`` requires, the behavioral-anomaly HMM
+given the ~450 iterations its Baum-Welch needs (it scored below chance at 40), the parallel
+planner case planted with a per-worker memory that exercises model sharding, and two
+unconditional claims (a recovered second batting-average mode, a topic signal) made conditional
+on the computed output. The stock-portfolio regime mixture recovers its 0.79/0.21 regimes on the
+notebook's own seed again (a mixle initialization regression, repaired in 0.8.1).
+
+Round 2 -- 2026-08-10
+---------------------
 
 Re-executed the full corpus against the current ``release/0.8.0`` tip (``7f0c7bd1``), because the
 2026-08-06 round below predates a large adversarial statistical-review campaign (passes 2-23) that
