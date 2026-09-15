@@ -6,8 +6,32 @@ This page is the release-facing execution manifest for ``mixle-notebooks``. Unli
 status of every shipped notebook against the release target, so a release claim points to
 evidence rather than to committed output cells.
 
-Round 3 -- 2026-09-07 (current)
+Round 4 -- 2026-09-15 (current)
 --------------------------------
+
+Re-executed the full corpus **in place** (committed output cells are this round's) against the
+``mixle`` 0.8.2 release candidate: the wheel built from ``release/0.8.2`` at ``f72a933c`` after the
+ten-pass adversarial review of the 0.8.2 candidate and its independent re-run (mixle
+``release-checklists/0.8.2-reviews/``), sha256 ``a105b1c0``, embedded source content digest
+``84c1cd26``. Installed into a venv with the corpus requirements plus ``numba``, ``torch``,
+``pyspark`` (JDK 17) and the ``mixle-pde``/``mixle-sim``/``mixle-physics`` pins; every run launched
+from ``/tmp`` with ``PYTHONPATH`` unset, so the installed wheel is what executed. Method: each
+notebook executed from its own directory by ``jupyter nbconvert --execute --inplace``, two at a time,
+3600 s per cell (9000 s for ``malware_certificate_embedding``); ``OMP/OPENBLAS/MKL_NUM_THREADS=2``,
+``PYTHONHASHSEED=0``.
+
+**131 of 131 execute clean** (exit 0 for every notebook; the longest were
+``malware_certificate_embedding`` at 1915 s and ``model_based_embeddings`` at 1353 s). The
+same wheel ran every ``examples/*.py`` in the mixle repository, 57 of 57 exit 0.
+
+The refreshed outputs close the review's Q08-F14: the stored outputs had still shown the numbers
+from before three library repairs that the wheel now prints correctly -- ``probabilistic_programming``
+reports ``ESS 1000`` for its 1000 HMC draws and ``mean=1.00 var=9.00`` for ``3*N(0,1)+1``, and the
+``print_iter`` cells of ``latent_variable_models`` and ``estimation_using_spark`` print their progress
+lines. The prose repairs the same review asked for are in the previous commit on this branch.
+
+Round 3 -- 2026-09-07
+---------------------
 
 Re-executed the full corpus **in place** (committed output cells are this round's) against the
 ``mixle`` 0.8.1 release candidate: the repaired candidate wheel built from ``release/0.8.1`` after
