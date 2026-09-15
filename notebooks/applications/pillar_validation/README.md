@@ -22,13 +22,21 @@ committed fixture, never live data.
 
 ## A note on what's real vs. reference-implemented
 
-Several of these pillars' own Wave 1–3 modules had not yet landed on `release/0.8.0` in the sibling
-`mixle`/`mixle-pde` checkouts at the time these notebooks were written (`mixle.reason.posterior_protocol`,
-`mixle_pde.decision_quantities`, `mixle.stochastic_opt`, `mixle.analysis.objective`,
-`mixle.analysis.health_risk`, `mixle_pde.climate_downscale` + `mixle.analysis.quantile_mapping`,
-`mixle.analysis.sdm`, `mixle_pde.simulation_service` + `mixle_pde.io.artifacts`). Every notebook tries the
-real import first and transparently uses it once it merges; until then each falls back to a small
-reference implementation of that module's exact frozen algorithm, so the notebook is reproducible today.
+When these notebooks were written, several pillars' own Wave 1–3 modules had not yet landed in the
+sibling `mixle`/`mixle-pde` checkouts, so every notebook tries the real import first and falls back to a
+small reference implementation of that module's exact frozen algorithm when the import fails. The
+notebook prints which one it used.
+
+On the 0.8.2 release environment (with `mixle-pde` installed) five of the seven now run the landed
+modules: `calibration_A`, `production_H`, `health_K`, `biodiversity_N` and `simulation_P`. Two still
+fall back, and their verdict line says so instead of printing a bare PASS:
+
+- `climate_L` — `mixle.analysis.quantile_mapping` does not exist in mixle 0.8.2 (the
+  `mixle_pde.climate_downscale` half imports);
+- `economics_J` — `mixle.analysis.objective` exports `priced_liabilities` but not `risk_adjusted_plan`.
+
+For those two the assert cell checks the reference implementation, so "a broken pillar fails the
+notebook" holds for the pillar's algorithm but not yet for the library module that will carry it.
 
 Where the *underlying* primitive already exists in the library, the notebooks use it directly rather than
 reimplementing it: `mixle.relations.branch_and_bound_milp` (the block-selection MILPs in `production_H` and
