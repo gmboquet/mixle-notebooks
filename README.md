@@ -26,15 +26,15 @@ physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) e
 `release/0.8.0` commit so that module is included, since it isn't on a PyPI release or on
 `mixle-pde`'s `main` branch yet.
 `data_science/adaptive_mesh_refinement` needs **[`mixle-sim`](https://github.com/gmboquet/mixle-sim)**
-(`release/0.8.0`, unreleased) for its new residual/jump error estimator and mesh adaptation
+(`release/0.8.3`, unreleased) for its new residual/jump error estimator and mesh adaptation
 (`error_estimation`), and, transitively, **[`mixle-physics`](https://github.com/gmboquet/mixle-physics)**
 (`mixle_sim`'s own package import pulls it in). To install the unreleased code directly:
 
 ```sh
-pip install "mixle[all] @ git+https://github.com/gmboquet/mixle.git"
+pip install "mixle[all] @ git+https://github.com/gmboquet/mixle.git@release/0.8.3"
 pip install "mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git"   # physics/PDE notebooks
-pip install "mixle-sim @ git+https://github.com/gmboquet/mixle-sim.git@release/0.8.0"        # adaptive mesh refinement
-pip install "mixle-physics @ git+https://github.com/gmboquet/mixle-physics.git@release/0.8.0" # mixle-sim's own dependency
+pip install "mixle-sim @ git+https://github.com/gmboquet/mixle-sim.git@release/0.8.3"        # adaptive mesh refinement
+pip install "mixle-physics @ git+https://github.com/gmboquet/mixle-physics.git@release/0.8.3" # mixle-sim's own dependency
 ```
 
 The Spark tutorial additionally needs a JVM (PySpark 4.x requires Java 17 or 21, e.g.

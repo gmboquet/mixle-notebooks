@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.8.2 - Unreleased
+## 0.8.3 - Unreleased
+
+The corpus tracks the mixle 0.8.3 pre-release cycle: `requirements.txt` installs `mixle`, `mixle-sim` and
+`mixle-physics` from their `release/0.8.3` branches (`mixle` at `0.8.3rc1` until the final cut). No notebook
+changed; the retained outputs are the 2026-09-15 execution on the final 0.8.2 candidate wheel.
+
+## 0.8.2 - 2026-09-17
 
 ### Fixed
 
