@@ -22,9 +22,9 @@ notebooks (`flow_inversion`, `oil_exploration_decision`, `radar_tomography`,
 **[`mixle-pde`](https://github.com/gmboquet/mixle-pde)** package — the differentiable PDE /
 physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) extracted out of `mixle`.
 `data_science/newton_continuation_and_folds` needs it too, for the `continuation` module
-(natural- and pseudo-arclength parameter continuation); `requirements.txt` pins `mixle-pde` to a
-`release/0.8.0` commit so that module is included, since it isn't on a PyPI release or on
-`mixle-pde`'s `main` branch yet.
+(natural- and pseudo-arclength parameter continuation); `requirements.txt` installs `mixle-pde` from its
+`release/0.8.3` branch, which carries that module (it isn't on a PyPI release or on `mixle-pde`'s
+`main` branch).
 `data_science/adaptive_mesh_refinement` needs **[`mixle-sim`](https://github.com/gmboquet/mixle-sim)**
 (`release/0.8.3`, unreleased) for its new residual/jump error estimator and mesh adaptation
 (`error_estimation`), and, transitively, **[`mixle-physics`](https://github.com/gmboquet/mixle-physics)**
@@ -32,7 +32,7 @@ physics stack (`Differential`, `make_ops`, `laplacian`, `NavierStokes2D`, ...) e
 
 ```sh
 pip install "mixle[all] @ git+https://github.com/gmboquet/mixle.git@release/0.8.3"
-pip install "mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git"   # physics/PDE notebooks
+pip install "mixle-pde @ git+https://github.com/gmboquet/mixle-pde.git@release/0.8.3"   # physics/PDE notebooks
 pip install "mixle-sim @ git+https://github.com/gmboquet/mixle-sim.git@release/0.8.3"        # adaptive mesh refinement
 pip install "mixle-physics @ git+https://github.com/gmboquet/mixle-physics.git@release/0.8.3" # mixle-sim's own dependency
 ```
